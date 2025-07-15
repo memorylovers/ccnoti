@@ -60,6 +60,46 @@ npx ccnoti -c my-config.json -m "Custom config"
 
 **Note**: Command line options always override configuration file settings.
 
+## Integration with Claude Code Hooks
+
+You can use ccnoti with Claude Code hooks to get notifications during your coding sessions. Add the following to your Claude Code configuration:
+
+```json
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx ccnoti@latest --sound --voice --desktop -m 'Waiting for input'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx ccnoti@latest --sound --voice --desktop -m 'Task completed'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+This configuration will:
+
+- **Notification hook**: Play a notification when Claude is waiting for your input
+- **Stop hook**: Play a notification when Claude has completed a task
+
+You can customize the message and notification types (sound, voice, desktop) according to your preferences.
+
 ## Platform Support
 
 - **macOS/Windows**: Full support (sound, voice, desktop notifications)

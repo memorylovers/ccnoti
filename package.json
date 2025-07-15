@@ -1,7 +1,7 @@
 {
   "name": "ccnoti",
-  "version": "0.2.0",
-  "description": "Cross-platform notification CLI with sound, voice, and desktop alerts",
+  "version": "0.1.1",
+  "description": "Cross-Channel Notification CLI with sound, voice, and desktop alerts",
   "author": "Memory Lovers, LLC<https://github.com/memorylovers>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/memory-lovers",
