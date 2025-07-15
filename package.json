@@ -1,0 +1,78 @@
+{
+  "name": "ccnoti",
+  "version": "0.1.0",
+  "description": "Cross-platform notification CLI with sound, voice, and desktop alerts",
+  "author": "Memory Lovers, LLC<https://github.com/memorylovers>",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/memory-lovers",
+  "homepage": "https://github.com/memorylovers/ccnoti",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/memorylovers/ccnoti.git"
+  },
+  "bugs": {
+    "url": "https://github.com/memorylovers/ccnoti/issues"
+  },
+  "keywords": [
+    "cli",
+    "typescript",
+    "notification"
+  ],
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "main": "./bin/cli.mjs",
+  "bin": {
+    "ccnoti": "./bin/cli.mjs"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin",
+    "assets"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "typecheck": "tsc --noEmit",
+    "setver": "pnpm version --no-git-tag-version --allow-same-version",
+    "test": "CONSOLA_LEVEL=5 vitest run"
+  },
+  "dependencies": {
+    "c12": "^3.0.4",
+    "citty": "^0.1.6",
+    "consola": "^3.4.2",
+    "defu": "^6.1.4",
+    "node-notifier": "^10.0.1",
+    "pathe": "^2.0.3",
+    "say": "^0.16.0",
+    "sound-play": "^1.1.0",
+    "unbuild": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.13",
+    "@types/node-notifier": "^8.0.5",
+    "@types/sound-play": "^1.1.3",
+    "jiti": "^2.4.2",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

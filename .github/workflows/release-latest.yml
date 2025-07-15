@@ -1,0 +1,65 @@
+name: Publish Release
+"on":
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+env:
+  GH_USER_EMAIL: 41898282+github-acitons[bot]@users.noreply.github.com
+  GH_USER_NAME: github-acitons[bot]
+  TAG_VERSION_PREFIX: v
+  VERSION: ""
+
+# *****************************************************
+# * publish to npm when add tag
+# *****************************************************
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # *****************************************************
+      # * GET VERSION
+      # *****************************************************
+      - run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+      # *****************************************************
+      # * SETUP
+      # *****************************************************
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          cache: "pnpm"
+          node-version-file: ".node-version"
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # *****************************************************
+      # * set version in package.json
+      # *****************************************************
+      - run: pnpm version ${{ env.VERSION }} --no-git-tag-version --allow-same-version
+
+      # *****************************************************
+      # * Install and Build
+      # *****************************************************
+      - run: pnpm i && pnpm build --minify
+
+      # *****************************************************
+      # * Publish
+      # *****************************************************
+      - name: publish package
+        run: pnpm publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: create release note
+        run: gh release create ${{ env.VERSION }} --generate-notes -d
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

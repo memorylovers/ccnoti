@@ -1,0 +1,65 @@
+name: Publish Release Canary
+"on":
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  GH_USER_EMAIL: 41898282+github-acitons[bot]@users.noreply.github.com
+  GH_USER_NAME: github-acitons[bot]
+  TAG_VERSION_PREFIX: v
+  VERSION: ""
+  CURRENT_DATETIME: ""
+
+# *****************************************************
+# * publish to npm when add rc tag
+# *****************************************************
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # *****************************************************
+      # * SETUP
+      # *****************************************************
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          cache: "pnpm"
+          node-version-file: ".node-version"
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # *****************************************************
+      # * GET VERSION & datetime
+      # *****************************************************
+      - run: |
+          version=`cat package.json | jq -r '.version'`
+          echo "VERSION=${version}" >> $GITHUB_ENV
+      - run: echo "CURRENT_DATETIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        env:
+          TZ: "Asia/Tokyo"
+      # *****************************************************
+      # * set version in package.json
+      # *****************************************************
+      - run: pnpm version ${{ env.VERSION }}-rc.${{ env.CURRENT_DATETIME }} --no-git-tag-version --allow-same-version
+
+      # *****************************************************
+      # * Install and Build
+      # *****************************************************
+      - run: pnpm i && pnpm build
+
+      # *****************************************************
+      # * Publish
+      # *****************************************************
+      - name: publish package
+        run: pnpm publish --no-git-checks --tag rc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,6 @@
+{
+  "sound": true,
+  "voice": true,
+  "desktop": false,
+  "soundFile": "/System/Library/Sounds/Glass.aiff"
+}
