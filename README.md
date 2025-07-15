@@ -133,7 +133,7 @@ You can customize the message and notification types (sound, voice, desktop) acc
 
 ## License
 
-MIT
+[MIT License](/LICENSE) [@kira_puka](https://x.com/kira_puka)@[Memory Lovers, LLC](https://memory-lovers.com)
 
 ## Contributing
 
