@@ -22,6 +22,26 @@ $CCNOTI --sound --soundFile=/System/Library/Sounds/Ping.aiff
 echo
 read -p "Enterキーを押して続行..." -r
 
+echo "# 音量指定（小音量 0.1）"
+$CCNOTI --sound --volume 0.1
+echo
+read -p "Enterキーを押して続行..." -r
+
+echo "# 音量指定（デフォルト 0.5）"
+$CCNOTI --sound --volume 0.5
+echo
+read -p "Enterキーを押して続行..." -r
+
+echo "# 音量指定（大音量 1.0）"
+$CCNOTI --sound --volume 1.0
+echo
+read -p "Enterキーを押して続行..." -r
+
+echo "# 音量指定（範囲外 - 警告が出るはず）"
+$CCNOTI --sound --volume 1.5
+echo
+read -p "Enterキーを押して続行..." -r
+
 echo "# 音声読み上げ"
 $CCNOTI --voice --message="テスト音声"
 echo

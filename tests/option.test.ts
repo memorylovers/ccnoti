@@ -1,11 +1,26 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { resolveOption } from "../src/lib/option";
 import { Options, PartialOptions } from "../src/types";
+import { consola } from "consola";
+
+// Mock consola
+vi.mock("consola", () => ({
+  consola: {
+    warn: vi.fn(),
+  },
+}));
 
 describe("resolveOption", () => {
+  const mockConsola = vi.mocked(consola.warn);
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   const mockConfig: Options = {
     sound: false,
     soundFile: "/default.aiff",
+    volume: 0.5,
     voice: false,
     desktop: false,
   };
@@ -48,6 +63,7 @@ describe("resolveOption", () => {
       const config: Options = {
         sound: false,
         soundFile: "/config.aiff",
+        volume: 0.5,
         voice: false,
         desktop: false,
       };
@@ -72,6 +88,7 @@ describe("resolveOption", () => {
       const config: Options = {
         sound: true,
         soundFile: "/config.aiff",
+        volume: 0.5,
         voice: false,
         desktop: false,
       };
@@ -85,6 +102,7 @@ describe("resolveOption", () => {
       expect(result).toEqual({
         sound: true,
         soundFile: "/config.aiff",
+        volume: 0.5,
         voice: false,
         desktop: true,
         message: "args-message",
@@ -95,6 +113,7 @@ describe("resolveOption", () => {
       const config: Options = {
         sound: true,
         soundFile: "/default.aiff",
+        volume: 0.5,
         voice: true,
         desktop: true,
       };
@@ -137,6 +156,7 @@ describe("resolveOption", () => {
       const config: Options = {
         sound: false,
         soundFile: "/config.aiff",
+        volume: 0.5,
         voice: false,
         desktop: false,
       };
@@ -171,6 +191,58 @@ describe("resolveOption", () => {
       expect(typeof typedResult.soundFile).toBe("string");
       expect(typeof typedResult.voice).toBe("boolean");
       expect(typeof typedResult.desktop).toBe("boolean");
+    });
+  });
+
+  describe("volume validation", () => {
+    it("should use volume from args over config", () => {
+      const args: PartialOptions = {
+        volume: 0.8,
+      };
+
+      const result = resolveOption(mockConfig, args);
+
+      expect(result.volume).toBe(0.8);
+      expect(mockConsola).not.toHaveBeenCalled();
+    });
+
+    it("should warn and use default for invalid volume in config", () => {
+      const configWithInvalidVolume: Options = {
+        ...mockConfig,
+        volume: 1.5,
+      };
+
+      const result = resolveOption(configWithInvalidVolume, {});
+
+      expect(result.volume).toBe(0.5);
+      expect(mockConsola).toHaveBeenCalledWith(
+        "Invalid volume 1.5 in configuration. Using default volume 0.5"
+      );
+    });
+
+    it("should warn and use default for negative volume", () => {
+      const args: PartialOptions = {
+        volume: -0.3,
+      };
+
+      const result = resolveOption(mockConfig, args);
+
+      expect(result.volume).toBe(0.5);
+      expect(mockConsola).toHaveBeenCalledWith(
+        "Invalid volume -0.3 in configuration. Using default volume 0.5"
+      );
+    });
+
+    it("should accept boundary values", () => {
+      const args1: PartialOptions = { volume: 0.0 };
+      const result1 = resolveOption(mockConfig, args1);
+      expect(result1.volume).toBe(0.0);
+
+      const args2: PartialOptions = { volume: 1.0 };
+      const result2 = resolveOption(mockConfig, args2);
+      expect(result2.volume).toBe(1.0);
+
+      expect(mockConsola).not.toHaveBeenCalled();
     });
   });
 });

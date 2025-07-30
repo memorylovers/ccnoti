@@ -32,6 +32,7 @@ describe("config", () => {
       expect(defaultConfig).toEqual({
         sound: false,
         soundFile: "/System/Library/Sounds/Glass.aiff",
+        volume: 0.5,
         voice: false,
         desktop: false,
       });
@@ -82,6 +83,7 @@ describe("config", () => {
       expect(result).toEqual({
         sound: true,
         soundFile: "/System/Library/Sounds/Glass.aiff",
+        volume: 0.5,
         voice: true,
         desktop: false,
       });
@@ -197,6 +199,7 @@ describe("config", () => {
       expect(result).toEqual({
         sound: true,
         soundFile: "/System/Library/Sounds/Glass.aiff", // From default
+        volume: 0.5, // From default
         voice: false, // From default
         desktop: true,
         message: "This is a complex test message",

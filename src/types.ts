@@ -8,6 +8,8 @@ export interface Options {
   sound: boolean;
   /** Path to the sound file to play */
   soundFile: string;
+  /** Sound volume (0.0-1.0) */
+  volume?: number;
   /** Whether to use text-to-speech */
   voice: boolean;
   /** Whether to show a system notification */
