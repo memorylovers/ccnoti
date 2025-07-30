@@ -35,5 +35,20 @@ read -p "Enterキーを押して続行..." -r
 echo "# 日本語で全機能"
 $CCNOTI --sound --voice --desktop --message="テスト完了"
 echo
+read -p "Enterキーを押して続行..." -r
+
+echo "# 小音量効果音＋通知"
+$CCNOTI --sound --volume 0.2 --desktop --message="小音量テスト"
+echo
+read -p "Enterキーを押して続行..." -r
+
+echo "# 大音量効果音＋音声＋通知"
+$CCNOTI --sound --volume 0.9 --voice --desktop --message="大音量で全機能"
+echo
+read -p "Enterキーを押して続行..." -r
+
+echo "# カスタム効果音＋音量指定"
+$CCNOTI --sound --soundFile=/System/Library/Sounds/Glass.aiff --volume 0.3 --message="カスタム音量"
+echo
 
 echo "完了"

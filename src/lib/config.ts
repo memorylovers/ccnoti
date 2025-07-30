@@ -11,6 +11,7 @@ import { getDefaultSoundFile } from "./default-sounds";
 export const defaultConfig: Options = {
   sound: false,
   soundFile: getDefaultSoundFile(),
+  volume: 0.5,
   voice: false,
   desktop: false,
 };

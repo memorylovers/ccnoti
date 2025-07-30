@@ -4,7 +4,7 @@ import { description, name, version } from "../package.json";
 import { loadMyConfig } from "./lib/config";
 import { resolveOption } from "./lib/option";
 import { ccnoti } from "./main";
-import { Options } from "./types";
+import { Options, PartialOptions } from "./types";
 
 export const runMain = () => _runMain(main);
 
@@ -31,6 +31,11 @@ const main = defineCommand({
       type: "string",
       description: "Sound file path to play",
     },
+    volume: {
+      type: "string",
+      description: "Sound volume (0.0-1.0)",
+      alias: "V",
+    },
     // テキストオプション
     message: {
       type: "string",
@@ -49,12 +54,21 @@ const main = defineCommand({
 
     try {
       // 1. 設定ファイルを読み込む
-      const config: Options = await loadMyConfig(args.config);
+      const config: Options = await loadMyConfig(
+        args.config as string | undefined
+      );
 
       // 2. オプションをマージ（優先順位: コマンドライン引数 > 設定ファイル）
       // configはCLI引数であり通知オプションではないので除外
-      const { config: _, ...optionArgs } = args;
-      const options = resolveOption(config, optionArgs);
+      const { config: _, volume, ...optionArgs } = args;
+
+      // volumeを数値に変換
+      const parsedOptions: PartialOptions = {
+        ...optionArgs,
+        ...(volume !== undefined && { volume: parseFloat(volume as string) }),
+      };
+
+      const options = resolveOption(config, parsedOptions);
       consola.debug("Final options:", options);
 
       // 4. 各機能を実行

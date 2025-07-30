@@ -26,6 +26,8 @@ npx ccnoti -d -m "Task complete"     # Desktop notification (with sound)
 npx ccnoti -d -v  -m "All tests pass" # Sound + Desktop notification
 npx ccnoti -v -m "Deploy complete"   # Voice only
 npx ccnoti -s                        # Sound only
+npx ccnoti -s -V 0.3                # Sound with low volume (30%)
+npx ccnoti -s -V 1.0                # Sound with max volume
 ```
 
 ## Command Line Options
@@ -36,6 +38,7 @@ npx ccnoti -s                        # Sound only
 | `--voice` | `-v` | Enable text-to-speech | `--voice` |
 | `--desktop` | `-d` | Show Desktop notification | `--desktop` |
 | `--soundFile <path>` | - | Sound file path to play | `--soundFile=/System/Library/Sounds/Glass.aiff` |
+| `--volume <num>` | `-V` | Sound volume (0.0-1.0) | `--volume 0.5` |
 | `--message <text>` | `-m` | Notification message text | `--message "Task done"` |
 | `--config <path>` | `-c` | Path to config file | `--config my-config.json` |
 
@@ -48,7 +51,8 @@ Create a `.ccnotirc` file in your project root (automatically loaded):
   "sound": true,
   "voice": true,
   "desktop": false,
-  "soundFile": "/System/Library/Sounds/Glass.aiff"
+  "soundFile": "/System/Library/Sounds/Glass.aiff",
+  "volume": 0.5
 }
 ```
 
