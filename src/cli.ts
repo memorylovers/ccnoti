@@ -3,6 +3,7 @@ import { consola } from "consola";
 import { description, name, version } from "../package.json";
 import { loadMyConfig } from "./lib/config";
 import { resolveOption } from "./lib/option";
+import { resolvePath } from "./lib/utils";
 import { ccnoti } from "./main";
 import { Options, PartialOptions } from "./types";
 
@@ -54,8 +55,9 @@ const main = defineCommand({
 
     try {
       // 1. 設定ファイルを読み込む
+      const configPath = args.config ? resolvePath(args.config) : undefined;
       const config: Options = await loadMyConfig(
-        args.config as string | undefined
+        configPath as string | undefined
       );
 
       // 2. オプションをマージ（優先順位: コマンドライン引数 > 設定ファイル）

@@ -2,6 +2,7 @@ import { consola } from "consola";
 import { existsSync } from "fs";
 import sound from "sound-play";
 import { Options } from "../types";
+import { resolvePath } from "./utils";
 
 export async function notifySound(
   options: Options
@@ -12,8 +13,11 @@ export async function notifySound(
       return;
     }
 
+    // Resolve path (tilde expansion and relative path)
+    const resolvedPath = resolvePath(options.soundFile);
+
     // ファイルの存在確認
-    if (!existsSync(options.soundFile)) {
+    if (!existsSync(resolvedPath)) {
       throw new Error(`Sound file not found: ${options.soundFile}`);
     }
 
@@ -25,7 +29,7 @@ export async function notifySound(
     }
 
     // sound-playで再生
-    await sound.play(options.soundFile, volume);
+    await sound.play(resolvedPath, volume);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     consola.error(message);

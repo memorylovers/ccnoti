@@ -1,6 +1,7 @@
 import defu from "defu";
 import { consola } from "consola";
 import { Options, PartialOptions } from "../types";
+import { resolvePath } from "./utils";
 
 /**
  * resolve option values
@@ -11,6 +12,12 @@ import { Options, PartialOptions } from "../types";
  */
 export function resolveOption(config: Options, args: PartialOptions): Options {
   const options = defu(args, config);
+  
+  // Resolve soundFile path from CLI arguments
+  if (args.soundFile && options.soundFile) {
+    options.soundFile = resolvePath(options.soundFile);
+  }
+  
   
   // 音量の検証
   if (options.volume !== undefined && options.volume !== null) {
